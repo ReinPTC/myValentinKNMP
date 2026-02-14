@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Krysten ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffdde1;
+            background-image: linear-gradient(to right, #ee9ca7, #ffdde1);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; /* Evita barras de desplazamiento cuando el botón se mueve */
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            padding: 0 20px;
+        }
+
+        .container {
+            position: relative;
+            text-align: center;
+        }
+
+        .gif-container {
+            margin-bottom: 20px;
+        }
+
+        .gif-container img {
+            width: 150px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button {
+            font-size: 1.2rem;
+            padding: 10px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            font-weight: bold;
+        }
+
+        #yesBtn {
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            background-color: #218838;
+        }
+
+        #noBtn {
+            background-color: #dc3545;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            /* El botón "No" se posicionará absolutamente para poder moverse */
+            position: relative; 
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="gif-container">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3hneG1wZ3JtZ3JtZ3JtZ3JtZ3JtZ3JtZ3JtZ3JtZ3J0ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute heart">
+    </div>
+
+    <h1>Krysten, ¿quieres ser mi San Valentín?</h1>
+
+    <div class="container">
+        <button id="yesBtn" onclick="acepto()">¡Sí, claro que sí!</button>
+        <button id="noBtn" onmouseover="huir()" onclick="huir()">No</button>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+
+        // Función para mover el botón "No" aleatoriamente
+        function huir() {
+            // Obtener dimensiones de la ventana
+            const anchoVentana = window.innerWidth;
+            const altoVentana = window.innerHeight;
+
+            // Obtener dimensiones del botón
+            const anchoBtn = noBtn.offsetWidth;
+            const altoBtn = noBtn.offsetHeight;
+
+            // Calcular nueva posición aleatoria manteniéndose dentro de la pantalla
+            // Restamos el tamaño del botón y un margen de seguridad
+            const nuevaX = Math.random() * (anchoVentana - anchoBtn - 50);
+            const nuevaY = Math.random() * (altoVentana - altoBtn - 50);
+
+            // Aplicar la nueva posición
+            noBtn.style.position = 'fixed'; // Cambiamos a fixed para moverlo por toda la pantalla
+            noBtn.style.left = nuevaX + 'px';
+            noBtn.style.top = nuevaY + 'px';
+        }
+
+        // Función cuando dice que SÍ
+        function acepto() {
+            // Lanza confeti inicial
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            // Mensaje final personalizado
+            document.querySelector('h1').innerHTML = "¡Sabía que dirías que sí! ❤️<br>Te amo Krysten";
+            // Cambia el gif por uno de celebración
+            document.querySelector('.gif-container img').src = "https://media.giphy.com/media/T86i6yDyOYz7J6v9d5/giphy.gif"; 
+            
+            // Ocultar el botón de No y cambiar el texto del Sí
+            noBtn.style.display = 'none';
+            yesBtn.innerText = "❤️";
+            
+            // Más confeti automático durante 3 segundos
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        // Soporte extra para móvil (táctil) para asegurar que huya al tocarlo
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Evita que se haga click real
+            huir();
+        });
+        
+    </script>
+</body>
+</html>
