@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Krysten ❤️</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
         body {
             margin: 0;
@@ -15,62 +21,77 @@
             align-items: center;
             background-color: #ffdde1;
             background-image: linear-gradient(to right, #ee9ca7, #ffdde1);
-            font-family: 'Arial', sans-serif;
-            overflow: hidden; /* Evita barras de desplazamiento cuando el botón se mueve */
+            /* Aplicamos la fuente base más suave */
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
         }
 
         h1 {
+            /* Aplicamos la fuente cursiva romántica para el título */
+            font-family: 'Great Vibes', cursive;
             color: #d63384;
-            font-size: 2.5rem;
+            font-size: 4rem; /* Aumenté el tamaño porque la cursiva se ve más chica */
             text-align: center;
-            margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            text-shadow: 3px 3px 6px rgba(255, 255, 255, 0.5); /* Sombra blanca suave para resaltar */
             padding: 0 20px;
+            line-height: 1.2;
         }
 
         .container {
             position: relative;
             text-align: center;
+            z-index: 10; /* Asegura que los botones estén por encima */
         }
 
         .gif-container {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .gif-container img {
-            width: 150px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 180px; /* Un poco más grande el gif */
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(214, 51, 132, 0.3); /* Sombra rosada */
+            border: 3px solid white;
         }
 
         button {
-            font-size: 1.2rem;
-            padding: 10px 30px;
-            margin: 10px;
+            /* Fuente suave para los botones */
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.3rem;
+            padding: 12px 35px;
+            margin: 15px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
-            font-weight: bold;
+            transition: all 0.3s ease;
+            font-weight: 700; /* Negrita */
+            letter-spacing: 1px;
         }
 
         #yesBtn {
-            background-color: #28a745;
+            background-color: #ff4d88; /* Color más vibrante */
             color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(255, 77, 136, 0.4);
         }
 
         #yesBtn:hover {
-            transform: scale(1.1);
-            background-color: #218838;
+            transform: scale(1.1) translateY(-3px);
+            background-color: #ff3377;
+            box-shadow: 0 8px 20px rgba(255, 77, 136, 0.6);
         }
 
         #noBtn {
-            background-color: #dc3545;
-            color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            /* El botón "No" se posicionará absolutamente para poder moverse */
+            background-color: white;
+            color: #ff4d88;
+            border: 2px solid #ff4d88;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             position: relative; 
+        }
+        
+        /* Clase para cuando el botón se mueve a fixed */
+        #noBtn.moving {
+             position: fixed;
         }
 
     </style>
@@ -81,10 +102,10 @@
         <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYXp4d2t0cm9rczUwcHNyZHE3ZnIxbWk4aHFmY2hrMzZrdHpqd2VxaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kD62fyVdWl4UmtfLiA/giphy.gif" alt="Cute heart">
     </div>
 
-    <h1>Krysten, ¿quieres ser mi San Valentín?</h1>
+    <h1>Krysten, <br>¿quieres ser mi San Valentín?</h1>
 
     <div class="container">
-        <button id="yesBtn" onclick="acepto()">¡Sí, claro que sí!</button>
+        <button id="yesBtn" onclick="acepto()">¡Sí, claro que sí! ❤️</button>
         <button id="noBtn" onmouseover="huir()" onclick="huir()">No</button>
     </div>
 
@@ -92,49 +113,44 @@
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
 
-        // Función para mover el botón "No" aleatoriamente
         function huir() {
-            // Obtener dimensiones de la ventana
+            // Añadir clase para asegurar posición fixed una vez que se mueve
+            noBtn.classList.add('moving');
+            
             const anchoVentana = window.innerWidth;
             const altoVentana = window.innerHeight;
-
-            // Obtener dimensiones del botón
             const anchoBtn = noBtn.offsetWidth;
             const altoBtn = noBtn.offsetHeight;
 
-            // Calcular nueva posición aleatoria manteniéndose dentro de la pantalla
-            // Restamos el tamaño del botón y un margen de seguridad
-            const nuevaX = Math.random() * (anchoVentana - anchoBtn - 50);
-            const nuevaY = Math.random() * (altoVentana - altoBtn - 50);
+            // Margen más grande para asegurar que no quede en los bordes difíciles de tocar
+            const margen = 60;
+            const nuevaX = Math.random() * (anchoVentana - anchoBtn - (margen*2)) + margen;
+            const nuevaY = Math.random() * (altoVentana - altoBtn - (margen*2)) + margen;
 
-            // Aplicar la nueva posición
-            noBtn.style.position = 'fixed'; // Cambiamos a fixed para moverlo por toda la pantalla
             noBtn.style.left = nuevaX + 'px';
             noBtn.style.top = nuevaY + 'px';
         }
 
-        // Función cuando dice que SÍ
         function acepto() {
-            // Lanza confeti inicial
+            // Confeti inicial
             confetti({
                 particleCount: 150,
                 spread: 70,
-                origin: { y: 0.6 }
+                origin: { y: 0.6 },
+                colors: ['#ff4d88', '#ffdde1', '#ffffff'] // Confeti en tonos rosas y blancos
             });
 
-            // Mensaje final personalizado
-            document.querySelector('h1').innerHTML = "¡Sabía que dirías que sí! ❤️<br>Te amo Krysten";
-            // Cambia el gif por uno de celebración
+            // Mensaje final con la nueva tipografía
+            document.querySelector('h1').innerHTML = "¡Sabía que dirías que sí! ❤️<br><span style='font-size: 3rem'>Te amo Krysten</span>";
             document.querySelector('.gif-container img').src = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjg0dG01djNyZHZnN2lrb2R4dTV1NThwYTJuZW0xZ3l2bHM5a3NjMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Z1z5FN2mDulzqK1onT/giphy.gif"; 
             
-            // Ocultar el botón de No y cambiar el texto del Sí
             noBtn.style.display = 'none';
-            yesBtn.innerText = "❤️";
+            yesBtn.style.display = 'none'; // Ocultamos también el botón de sí para limpiar la pantalla
             
-            // Más confeti automático durante 3 segundos
-            var duration = 3 * 1000;
+            // Más confeti automático
+            var duration = 4 * 1000;
             var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: ['#ff4d88', '#ffdde1', '#ffffff'] };
 
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
@@ -148,9 +164,8 @@
             }, 250);
         }
 
-        // Soporte extra para móvil (táctil) para asegurar que huya al tocarlo
         noBtn.addEventListener('touchstart', function(e) {
-            e.preventDefault(); // Evita que se haga click real
+            e.preventDefault();
             huir();
         });
         
